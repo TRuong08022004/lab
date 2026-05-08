@@ -1,12 +1,25 @@
-FROM registry.gitlab.com/labtainers/labtainer.base
-# Cài đặt FFmpeg và các thư viện hệ thống cho OpenCV
+# Sử dụng Ubuntu 20.04 làm nền để tránh lỗi 403 từ GitLab
+FROM ubuntu:20.04
+
+# Thiết lập để không bị dừng lại hỏi thông tin khi cài đặt
+ENV DEBIAN_FRONTEND=noninteractive
+
+# 1. Cập nhật và cài đặt các thư viện hệ thống cần thiết cho OpenCV và FFmpeg
 RUN apt-get update && apt-get install -y \
     python3-pip \
     ffmpeg \
     libgl1-mesa-glx \
-    libglib2.0-0
+    libglib2.0-0 \
+    sudo \
+    && rm -rf /var/lib/apt/lists/*
 
-# Cài đặt thư viện Python cần thiết
-RUN pip3 install opencv-python numpy scipy
+# 2. Cài đặt các thư viện Python cho bài lab (DEW Forensics)
+RUN pip3 install opencv-python-headless numpy scipy
 
-# Labtainer sẽ tự động copy các file từ thư mục bin/ vào /home/ubuntu/bin
+# 3. Thiết lập User ubuntu để tương thích hoàn toàn với cấu trúc Labtainer
+RUN useradd -m -s /bin/bash ubuntu && \
+    echo "ubuntu ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+# 4. Thiết lập môi trường làm việc mặc định
+USER ubuntu
+WORKDIR /home/ubuntu
