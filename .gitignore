@@ -1,0 +1,17 @@
+# Bỏ qua các file ảnh kết quả sinh ra trong quá trình làm lab
+data/*.png
+data/tampered*
+data/detected*
+
+# Bỏ qua các file log và phân tích trong thư mục reports
+reports/*.txt
+reports/*.log
+
+# Bỏ qua các file rác của Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Bỏ qua các file tạm của hệ điều hành
+.DS_Store
+.thumbs

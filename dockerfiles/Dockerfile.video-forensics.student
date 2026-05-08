@@ -1,0 +1,12 @@
+FROM registry.gitlab.com/labtainers/labtainer.base
+# Cài đặt FFmpeg và các thư viện hệ thống cho OpenCV
+RUN apt-get update && apt-get install -y \
+    python3-pip \
+    ffmpeg \
+    libgl1-mesa-glx \
+    libglib2.0-0
+
+# Cài đặt thư viện Python cần thiết
+RUN pip3 install opencv-python numpy scipy
+
+# Labtainer sẽ tự động copy các file từ thư mục bin/ vào /home/ubuntu/bin
