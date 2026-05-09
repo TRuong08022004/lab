@@ -3,19 +3,14 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y \
     python3-pip ffmpeg libgl1-mesa-glx libglib2.0-0 sudo \
+    python-is-python3 \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip3 install opencv-python-headless numpy scipy
-
-# Tạo user và các thư mục khung cho Labtainer
+# Tạo các thư mục hệ thống để Labtainer không báo lỗi chmod
 RUN useradd -m -s /bin/bash ubuntu && \
     echo "ubuntu ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
-RUN mkdir -p /home/ubuntu/.local/bin /home/ubuntu/.local/result /home/ubuntu/bin /home/ubuntu/data
-
-# Copy dữ liệu (Đảm bảo bạn làm Bước 3 bên dưới trước khi build)
-
-# Cấp quyền cho user ubuntu trên toàn bộ thư mục home
+RUN mkdir -p /home/ubuntu/.local/bin /home/ubuntu/.local/result
 RUN chown -R ubuntu:ubuntu /home/ubuntu
-
 USER ubuntu
 WORKDIR /home/ubuntu
