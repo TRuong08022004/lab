@@ -13,8 +13,6 @@ RUN useradd -m -s /bin/bash ubuntu && \
 RUN mkdir -p /home/ubuntu/.local/bin /home/ubuntu/.local/result /home/ubuntu/bin /home/ubuntu/data
 
 # Copy dữ liệu (Đảm bảo bạn làm Bước 3 bên dưới trước khi build)
-COPY bin/ /home/ubuntu/bin/
-COPY data/ /home/ubuntu/data/
 
 # Cấp quyền cho user ubuntu trên toàn bộ thư mục home
 RUN chown -R ubuntu:ubuntu /home/ubuntu
