@@ -7,17 +7,17 @@ RUN apt-get update && apt-get install -y \
 
 RUN pip3 install opencv-python-headless numpy scipy
 
-# Tạo user và các thư mục cần thiết
+# Tạo user và các thư mục khung cho Labtainer
 RUN useradd -m -s /bin/bash ubuntu && \
     echo "ubuntu ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 RUN mkdir -p /home/ubuntu/.local/bin /home/ubuntu/.local/result /home/ubuntu/bin /home/ubuntu/data
 
-# --- BƯỚC QUAN TRỌNG: COPY FILE VÀO CONTAINER ---
-# Lưu ý: Lệnh này yêu cầu thư mục bin và data nằm cùng cấp với Dockerfile
+# Copy dữ liệu (Đảm bảo bạn làm Bước 3 bên dưới trước khi build)
 COPY bin/ /home/ubuntu/bin/
 COPY data/ /home/ubuntu/data/
 
-# Phân quyền lại cho user ubuntu
+# Cấp quyền cho user ubuntu trên toàn bộ thư mục home
 RUN chown -R ubuntu:ubuntu /home/ubuntu
+
 USER ubuntu
 WORKDIR /home/ubuntu
