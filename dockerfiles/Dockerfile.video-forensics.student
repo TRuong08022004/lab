@@ -1,23 +1,23 @@
 FROM ubuntu:20.04
 ENV DEBIAN_FRONTEND=noninteractive
 
-# 1. Cài đặt các công cụ hệ thống và OpenCV
 RUN apt-get update && apt-get install -y \
     python3-pip ffmpeg libgl1-mesa-glx libglib2.0-0 sudo \
     && rm -rf /var/lib/apt/lists/*
 
-# 2. Cài đặt thư viện Python
 RUN pip3 install opencv-python-headless numpy scipy
 
-# 3. Tạo cấu trúc thư mục cho Labtainer (Khắc phục lỗi Checkwork)
+# Tạo user và các thư mục cần thiết
 RUN useradd -m -s /bin/bash ubuntu && \
     echo "ubuntu ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
-
-# Tạo sẵn các thư mục cần thiết
 RUN mkdir -p /home/ubuntu/.local/bin /home/ubuntu/.local/result /home/ubuntu/bin /home/ubuntu/data
 
-# 4. Phân quyền toàn diện cho user ubuntu
-RUN chown -R ubuntu:ubuntu /home/ubuntu
+# --- BƯỚC QUAN TRỌNG: COPY FILE VÀO CONTAINER ---
+# Lưu ý: Lệnh này yêu cầu thư mục bin và data nằm cùng cấp với Dockerfile
+COPY bin/ /home/ubuntu/bin/
+COPY data/ /home/ubuntu/data/
 
+# Phân quyền lại cho user ubuntu
+RUN chown -R ubuntu:ubuntu /home/ubuntu
 USER ubuntu
 WORKDIR /home/ubuntu
